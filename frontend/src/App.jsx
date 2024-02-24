@@ -1,19 +1,9 @@
-import './App.css';
-import React from "react";
-import { render } from 'react-dom';
-import { ChakraProvider } from "@chakra-ui/react";
+import "./App.css";
 
-import Header from "./components/Header";
-import Button from './components/Button';
-import Todos from "./components/Todos";
-
-const App = () => {
+function App() {
   return (
-    <ChakraProvider>
-        <Header />
-        <Todos />
-    </ChakraProvider>
-  )
+    <h1>TESTIN </h1>
+  );
 }
 
-export default App
+export default App;
