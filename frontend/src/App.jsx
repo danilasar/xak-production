@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { Button } from '@mui/material'
 import './App.css'
 import Navbar from "./components/Navbar/Navbar"
-import HomePage from './pages/HomePage/HomePage'
+import HomePage from "./pages/HomePage/HomePage"
+import ProfilePage from './pages/ProfilePage/ProfilePage'
+import CoursesPage from './pages/CoursesPage/CoursesPage'
+import MyCoursesPage from './pages/MyCoursesPage/MyCoursesPage'
+import LeaderboardPage from './pages/LeaderboardPage/LeaderboardPage'
 import { HomeRounded, SchoolRounded, LeaderboardRounded } from '@mui/icons-material'
 
 const App = () => {
-  const [tab, setTab] = useState("Главная")
+  const [tab, setTab] = useState("Курсы")
   const [user, setUser] = useState({
     id: 1,
     role: 1,
@@ -32,15 +36,22 @@ const App = () => {
   }
 
   return (
-    <main>
+    <>
       <Navbar current={tab} 
               onClick={setTab} 
-              tabs={[["Главная", <HomeRounded />], ["Мои курсы", <SchoolRounded />], ["Лидерборды", <LeaderboardRounded />]]}
+              tabs={[["Главная", <HomeRounded />], ["Курсы", <SchoolRounded />], ["Лидерборды", <LeaderboardRounded />]]}
               sessionUser={user}
               handleAuth={handleAuth}/>
       <pre>{tab}</pre>
+      <main>
       { tab === "Главная" && <HomePage /> }
-    </main>
+      { tab === "Курсы" && <CoursesPage /> }
+      { tab === "Лидерборды" && <LeaderboardPage /> }
+      { tab === "Мой профиль" && <ProfilePage /> }
+      { tab === "Мои курсы" && <MyCoursesPage /> }
+      </main>
+      
+    </>
   )
 }
 

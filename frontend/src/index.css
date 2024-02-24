@@ -17,3 +17,18 @@ code {
 html {scroll-behavior: smooth;}
 
 .buttonDesc {margin-left: .5rem;}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  
+  background-color: red;
+}
