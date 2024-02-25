@@ -12,8 +12,8 @@ role = Table(
     Column("permissions", JSON),
 )
 
-user = Table(
-    "user",
+users = Table(
+    "users",
     metadata,
     Column("id", Integer, primary_key=True),
     Column("email", String, nullable=False),
