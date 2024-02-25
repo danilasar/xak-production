@@ -36,6 +36,9 @@ class Users(SQLAlchemyBaseUserTable[int], Base):
     is_verified: Mapped[bool] = mapped_column(
         Boolean, default=False, nullable=False
     )
+    git_password: Mapped[str] = mapped_column(
+        String(), nullable=False, default=""
+    )
 
 
 engine = create_async_engine(DATABASE_URL)
