@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin, IntegerIDMixin, schemas, models
 
-from auth.database import User, get_user_db
+from auth.database import Users, get_user_db
 from git.auth import git_login_as_god
 from git.user import GitUser
 

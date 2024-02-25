@@ -53,7 +53,7 @@ courses = Table('courses',
     Column('category', Integer, ForeignKey('course_categories.id'), nullable=False),
     Column('name', String, nullable=False),
     Column('is_open', Boolean, nullable=False, default=True),
-    Column('sword', Boolean, nullable=True))
+    Column('sword', String, nullable=True, default=None))
 
 tasks = Table('tasks',
     metadata,
