@@ -4,10 +4,11 @@ class Course(BaseModel):
     owner_id: int
     category: int
     name: str
-    is_open: bool
+    is_open: int
     sword: str
-    slug: str
 
 class Group(BaseModel):
+    owner_id: int
     members: list
+    name: str
 
