@@ -24,14 +24,19 @@ class MyDataBase:
     def add_course(self, owner_id, category, name, is_open, sword):
         self.cursor.execute("INSERT INTO courses (owner_id, category, name, is_open, sword) VALUES (%s, %s, %s, %s, %s)", (owner_id, category, name, bool(is_open), sword))
         self.conn.commit()
+        return "Course added in db"
 
     def add_group(self, owner_id, members_id, name):
-        self.cursor.execute("INSERT INTO groups VALUES (%s, %s)", (owner_id, name))
+        self.cursor.execute("INSERT INTO groups (owner_id, name) VALUES (%s, %s)", (owner_id, name))
         self.conn.commit()
-        q = self.cursor.execute("SELECT id FROM groups WHERE name LIKE %s", (name,))
+        print(name)
+        created_course = self.cursor.execute("SELECT id FROM groups WHERE name LIKE %s", (name,))
+        print(created_course)
+        created_course_id = created_course.fetchone()[0]
         for members in members_id:
-            self.cursor.execute("INSERT INTO group VALUES (%s)", (q, members))
+            self.cursor.execute("INSERT INTO group_members VALUES (%s, %s)", (created_course_id, members))
         self.conn.commit()
+        return "Group added in db"
 
     #def join_course(self, ):
 

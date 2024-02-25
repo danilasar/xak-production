@@ -8,6 +8,7 @@ class Course(BaseModel):
     sword: str
 
 class Group(BaseModel):
+    owner_id: int
     members: list
     name: str
 
