@@ -3,18 +3,17 @@ from fastapi_users import FastAPIUsers
 from starlette import status
 
 from auth.auth import auth_backend
-from auth.database import User
+from auth.database import Users
 from auth.manager import get_user_manager
 from auth.schemas import UserRead, UserCreate
 
 from models.object_models import Course, Group
 from db.db import MyDataBase
-from config import DB_NAME, DB_USER, DB_PASS, DB_HOST
 
 db = MyDataBase()
 app = FastAPI()
 
-fastapi_users = FastAPIUsers[User, int](
+fastapi_users = FastAPIUsers[Users, int](
     get_user_manager,
     [auth_backend],
 )
@@ -33,20 +32,20 @@ app.include_router(
 current_user = fastapi_users.current_user()
 
 @app.get("/protected-route")
-def protected_route(user: User = Depends(current_user)):
+def protected_route(user: Users = Depends(current_user)):
     return f"Hello, {user.username}"
 
 @app.post("/create-course")
-async def create_course(course: Course, user: User = Depends(current_user)):
+async def create_course(course: Course, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Данная команда доступна только для преподавателей.",
         )
-    await db.add_course(course.owner_id, course.category, course.name, course.is_open, course.sword, course.slug)
-
+    await db.add_course(owner_id= user.id, category=course.category, name=course.name, is_open=course.is_open, sword=course.sword, slug=course.slug)
+    return f"Course created"
 @app.post("/create-group")
-def create_group(group: Group, user: User = Depends(current_user)):
+def create_group(group: Group, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

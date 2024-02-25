@@ -22,7 +22,7 @@ class MyDataBase:
         return result.fetchone()[0]
 
     async def add_course(self, owner_id, category, name, is_open, sword, slug):
-        await self.cursor.execute("INSERT INTO course (owner_id, category, name, is_open, sword, slug) VALUES = ?", (owner_id, category, name, is_open, sword, slug))
+        await self.cursor.execute("INSERT INTO courses (owner_id, category, name, is_open, sword, slug) VALUES (%s, %s, %s, %s, %s, %s)", (owner_id, category, name, is_open, sword, slug))
         self.conn.commit()
 '''
     def add_group(self, owner_id, members_id)

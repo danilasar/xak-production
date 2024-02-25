@@ -13,7 +13,7 @@ from models.models import role
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 Base: DeclarativeMeta = declarative_base()
 
-class User(SQLAlchemyBaseUserTable[int], Base):
+class Users(SQLAlchemyBaseUserTable[int], Base):
     id: Mapped[int] = mapped_column(
         Integer, primary_key=True
     )
@@ -47,4 +47,4 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
-    yield SQLAlchemyUserDatabase(session, User)
+    yield SQLAlchemyUserDatabase(session, Users)
