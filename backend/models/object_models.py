@@ -1,9 +1,12 @@
 from pydantic import BaseModel
 
 class Course(BaseModel):
+    owner_id: int
+    category: int
     name: str
-    description: str
-    type: bool
+    is_open: bool
+    sword: str
+    slug: str
 
 class Group(BaseModel):
     members: list
