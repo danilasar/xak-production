@@ -1,36 +1,28 @@
-import React from "react"
+import React, { useState } from "react"
 import style from "./CoursesPage.module.css"
+import CourseSearchCard from "../../components/CourseSearchCard/CourseSearchCard"
+import { TextField } from "@mui/material"
+import { ErrorOutlineRounded } from "@mui/icons-material"
 
-const CoursePage = (props) => {
-    const coursesList = [
-        {
-            id: 1,
-            owner_id: 156,
-            title: "Курс от Блиновской",
-            is_open: true,
-            category: ["Porno", "Milf", "Incest", "Taboo"]
-        }, {
-            id: 2,
-            owner_id: 74,
-            title: "Попаболь вышмат",
-            is_open: true,
-            category: ["Incest", "Dogs", "Zoo"]
-        }, {
-            id: 3,
-            owner_id: 12,
-            title: "СЕКС С ФИКСИКАМИ",
-            is_open: false,
-            category: ["Mults", "Moans", "Dogs"]
-        }
-    ]
+const CoursesPage = (props) => {
+    const [coursesList, setCoursesList] = useState(props.coursesList)
+
+    const filterList = (e) => {
+        const filteredList = props.coursesList.filter((item) => item.title.toLowerCase().search(e.target.value.toLowerCase()) !== -1)
+        setCoursesList(filteredList);
+    }
 
     return (
     <section>
         <div className={style.searchBar}>
-            
+            <TextField label="Искать курсы" variant="outlined" type="search" onChange={filterList} sx={{width: "100%"}}/>
         </div>
+        <div className={style.coursesWrapper}>
+            {coursesList && coursesList.map((item) => <CourseSearchCard setTab={props.setTab} value={item.title} {...item} />)}
+            {!coursesList && <div className={style.undefined} ><ErrorOutlineRounded /><h4>По вашему запросу ничего не найдено!</h4></div>}
+        </div><pre>{JSON.stringify(coursesList, ";", 2)}</pre>
     </section>
     )
 }
 
-export default CoursePage
+export default CoursesPage

@@ -1,9 +1,11 @@
 import React from "react"
 
 
-const CoursePage = () => {
+const CoursePage = (course, setTab) => {
     return (
-        <h1>CoursePage</h1>
+        <div className="wrapper">
+            <h1>{course.title}акак</h1>
+        </div>
     )
 }
 

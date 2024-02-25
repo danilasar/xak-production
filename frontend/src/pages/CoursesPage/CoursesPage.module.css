@@ -1,0 +1,21 @@
+.coursesWrapper, .searchBar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 720px;
+    justify-content: center;
+    align-items: center;
+}
+
+.undefined {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    margin: 1rem 0;
+}
+
+.undefined > h4 {
+    margin-left: 1rem;
+}

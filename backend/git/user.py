@@ -1,5 +1,9 @@
+import random
+import string
+
 import gitlab
 from git.auth import git_login_as_user, git_login_as_god
+
 
 class GitUser:
     def __init__(self, username, password):
@@ -14,7 +18,7 @@ class GitUser:
     @staticmethod
     def create(email, username):
         gl = git_login_as_god()
-        password = generate_password()
+        password = GitUser.generate_password()
         git_user = gl.users.create({'email': email,
                                     'password': password,
                                     'username': username,
