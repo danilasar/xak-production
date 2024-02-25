@@ -50,6 +50,8 @@ def create_course(course: Course, user: Users = Depends(current_user)):
         )
     db.add_course(owner_id= user.id, category=course.category, name=course.name, is_open=course.is_open, sword=course.sword)
     return f"Course {course.name} created successfully"
+
+'''
 @app.post("/create-group")
 def create_group(group: Group, user: Users = Depends(current_user)):
     if user.role_id != 2:
@@ -59,7 +61,7 @@ def create_group(group: Group, user: Users = Depends(current_user)):
         )
     db.add_group(owner_id=user.id, members_id=group.members, name=group.name)
     return f"Group {group.name} created successfully"
-
+'''
 '''
 @app.post("/join-course/{course_id}")
 async def join_course(course_id, user: User = Depends(current_user)):

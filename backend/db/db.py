@@ -25,7 +25,7 @@ class MyDataBase:
         self.cursor.execute("INSERT INTO courses (owner_id, category, name, is_open, sword) VALUES (%s, %s, %s, %s, %s)", (owner_id, category, name, bool(is_open), sword))
         self.conn.commit()
         return "Course added in db"
-
+'''
     def add_group(self, owner_id, members_id, name):
         self.cursor.execute("INSERT INTO groups (owner_id, name) VALUES (%s, %s)", (owner_id, name))
         self.conn.commit()
@@ -37,6 +37,7 @@ class MyDataBase:
             self.cursor.execute("INSERT INTO group_members VALUES (%s, %s)", (created_course_id, members))
         self.conn.commit()
         return "Group added in db"
+'''
 
     #def join_course(self, ):
 
