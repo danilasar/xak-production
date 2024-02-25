@@ -1,9 +1,11 @@
 import React from "react"
-
+import style from "./HomePage.module.css"
 
 const HomePage = () => {
     return (
-        <h1>HOME</h1>
+        <header className={style.headerWrapper}>
+            
+        </header>
     )
 }
 
