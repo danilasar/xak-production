@@ -38,8 +38,17 @@ class MyDataBase:
         self.conn.commit()
         return "Group added in db"
 
-    #def join_course(self, ):
+    def join_course(self, user_id, role_id, course_id):
+        self.cursor.execute("INSERT INTO course_members VALUES (%s, %s, %s)", (user_id, role_id, course_id))
+        self.conn.commit()
+        return f"User with ID {user_id} assigned to course {course_id}!"
 
+    def create_task(self, course_id, name, max_grade, description):
+        self.cursor.execute("INSERT INTO tasks (course_id, name, max_grade, description) VALUES (%s, %s, %s, %s)", (course_id, name, max_grade, description))
+        self.conn.commit()
+        return f"Task {name} added to course with ID {course_id}"
+      
+      
     def is_course_member(self, user_id, course_id)->bool:
         result = self.cursor.execute("SELECT id FROM course_members WHERE user_id = ? AND course_id = ?", (user_id,course_id))
         return bool(len(result.fetchall()))
@@ -58,7 +67,7 @@ class MyDataBase:
     def add_attempt(self, solution_id, commit_id):
         result = self.cursor.execute("INSERT INTO attempts (solution_id, commit_id) VALUES (%s, %s)", (solution_id, commit_id))
         self.conn.commit()
-
+      
 '''
     def delete_user(self, username):
         id = self.get_user_id(username)

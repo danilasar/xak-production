@@ -32,10 +32,6 @@ app.include_router(
 
 current_user = fastapi_users.current_user()
 
-@app.get("/protected-route")
-def protected_route(user: Users = Depends(current_user)):
-    return f"Hello, {user.username}"
-
 @app.get("/gitlab-test")
 def gitlab_test():
     gl = git_login_as_god()
@@ -43,7 +39,7 @@ def gitlab_test():
     print(users)
     return f"Hello"
   
-@app.post("/create-course")
+@app.post("/create-course", summary="Создание нового курса (Только преподаватель).", tags=["Courses"])
 def create_course(course: Course, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
@@ -52,7 +48,9 @@ def create_course(course: Course, user: Users = Depends(current_user)):
         )
     db.add_course(owner_id= user.id, category=course.category, name=course.name, is_open=course.is_open, sword=course.sword)
     return f"Course {course.name} created successfully"
-@app.post("/create-group")
+
+
+@app.post("/create-group", summary="Создание новой группы (Только преподаватель).", tags=["Groups"])
 def create_group(group: Group, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
@@ -62,15 +60,12 @@ def create_group(group: Group, user: Users = Depends(current_user)):
     db.add_group(owner_id=user.id, members_id=group.members, name=group.name)
     return f"Group {group.name} created successfully"
 
-'''
-@app.post("/join-course/{course_id}")
-async def join_course(course_id, user: User = Depends(current_user)):
-    query = course_members.insert().values(id = user.id, role = user.role_id, course_id = course_id)
-    await db.execute (query)
 
+@app.post("/join-course/{course_id}", summary="Присоединение к курсу", tags=["Courses"])
+def join_course(course_id, user: Users = Depends(current_user)):
+    db.join_course(user.id, user.role_id, course_id)
     return "Пользователь успешно записан на курс"
-'''
-
+  
 @app.post("/solve_task/{task_id}")
 async def solve_task(task_id, user: Users = Depends(current_user)):
     if user.role_id != 1:
@@ -84,3 +79,13 @@ async def solve_task(task_id, user: Users = Depends(current_user)):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Вы не являетесь участником данного курса.",
         )
+
+@app.post("/create-task/{course_id}", summary="Создание заданий на курсе (Только преподаватель)", tags=["Courses"])
+def create_task(course_id, name, max_grade, description, user: Users = Depends(current_user)):
+    if user.role_id != 2:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Данная команда доступна только для преподавателей.",
+        )
+    db.create_task(course_id, name, max_grade, description)
+    return "Задание успешно создано"

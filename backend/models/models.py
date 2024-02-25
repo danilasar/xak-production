@@ -61,7 +61,7 @@ tasks = Table('tasks',
     Column('course_id', Integer, ForeignKey('courses.id'), nullable=True),
     Column('name', String, nullable=False),
     Column('max_grade', Integer, nullable=False, default=100),
-    Column('slug', String))
+    Column('description', String))
 
 course_members = Table('course_members',
     metadata,
