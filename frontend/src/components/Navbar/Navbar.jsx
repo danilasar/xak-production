@@ -3,13 +3,24 @@ import { Button, Avatar, Menu, MenuItem } from "@mui/material"
 import { lightBlue, grey } from "@mui/material/colors"
 import { DataObjectRounded,
          LockOpenRounded,
-         ForumRounded,
          PersonRounded } from "@mui/icons-material"
 import { useState } from "react"
 
 const Navbar = (props) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const open = Boolean(anchorEl)
+
+    const handleLogout = (event) => {
+        props.setUser(null)
+    }
+
+    const handleAuth = () => {
+        props.onClick("auth")
+    }
+
+    const handleReg = () => {
+        props.onClick("reg")
+    }
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -37,12 +48,23 @@ const Navbar = (props) => {
             </ul>
 
             <ul className={style.items}>
-                {!props.sessionUser && <Button variant="contained"
-                                        onClick={props.handleAuth}
-                                        className={style.outlined}>
-                                            <LockOpenRounded />
-                                            <span className="buttonDesc">Авторизация</span>
-                                            </Button>}
+                {!props.sessionUser && <><Button variant="contained"
+                                        className={style.outlined}
+                                        id="userAuthToggler"
+                                        aria-controls={open ? 'basic-auth' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={handleClick}
+                                        startIcon={<LockOpenRounded />}>
+                                            Авторизация
+                                            </Button>
+                                    <Menu anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleClose}
+                                        MenuListProps={{'aria-labelledby': 'userAuthToggler'}}>
+                                    <MenuItem onClick={() => {handleClose("Вход");handleAuth("Вход")}}>Вход</MenuItem>
+                                    <MenuItem onClick={() => {handleClose("Регистрация");handleReg("Регистрация")}}>Регистрация</MenuItem>
+                                    </Menu></>}
                 {props.sessionUser && <>
         <Button variant="contained"
                 id="userInfoToggler"
@@ -60,7 +82,7 @@ const Navbar = (props) => {
               MenuListProps={{'aria-labelledby': 'userInfoToggler'}}>
         <MenuItem onClick={() => {handleClose("Мой профиль");props.onClick("Мой профиль")}}>Мой профиль</MenuItem>
         <MenuItem onClick={() => {handleClose("Мои курсы");props.onClick("Мои курсы")}} divider>Мои курсы</MenuItem>
-        <MenuItem onClick={() => {handleClose("Выйти");props.onClick("Выйти")}}>Выйти</MenuItem>
+        <MenuItem onClick={() => {handleClose("Выйти");handleLogout()}}>Выйти</MenuItem>
         </Menu></>}
             </ul>    
         </nav>
