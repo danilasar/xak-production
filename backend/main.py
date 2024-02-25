@@ -70,3 +70,17 @@ async def join_course(course_id, user: User = Depends(current_user)):
 
     return "Пользователь успешно записан на курс"
 '''
+
+@app.post("/solve_task/{task_id}")
+async def solve_task(task_id, user: Users = Depends(current_user)):
+    if user.role_id != 1:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Данная команда доступна только для учеников.",
+        )
+    task = db.get_task(task_id)
+    if(not db.is_course_member(user.id, task.course_id)):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Вы не являетесь участником данного курса.",
+        )

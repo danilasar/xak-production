@@ -40,6 +40,25 @@ class MyDataBase:
 
     #def join_course(self, ):
 
+    def is_course_member(self, user_id, course_id)->bool:
+        result = self.cursor.execute("SELECT id FROM course_members WHERE user_id = ? AND course_id = ?", (user_id,course_id))
+        return bool(len(result.fetchall()))
+
+    def getTask(self, task_id):
+        result = self.cursor.execute("SELECT * FROM tasks WHERE task_id = ?", (task_id))
+        return result.fetchall()
+
+    def add_solve(self, user_id, task_id):
+        result = self.cursor.execute("INSERT INTO task_solutions (user_id, task_id) VALUES (%s, %s)", (user_id, task_id))
+        self.conn.commit()
+
+    def get_last_attempt(self, solution_id):
+        result = self.cursor.execute("SELECT * FROM attempts WHERE solution_id=? ORDER B", (solution_id))
+        self.conn.commit()
+    def add_attempt(self, solution_id, commit_id):
+        result = self.cursor.execute("INSERT INTO attempts (solution_id, commit_id) VALUES (%s, %s)", (solution_id, commit_id))
+        self.conn.commit()
+
 '''
     def delete_user(self, username):
         id = self.get_user_id(username)
