@@ -7,6 +7,7 @@ from auth.database import User
 from auth.manager import get_user_manager
 from auth.schemas import UserRead, UserCreate
 
+from git.auth import git_login_as_god
 from models.object_models import Course, Group
 from auth.database import DATABASE_URL
 import psycopg2
@@ -34,7 +35,12 @@ current_user = fastapi_users.current_user()
 @app.get("/protected-route")
 def protected_route(user: User = Depends(current_user)):
     return f"Hello, {user.username}"
-
+  
+@app.get("/gitlab-test")
+def gitlab_test():
+    gl = git_login_as_god()
+    return f"Hello"
+  
 conn = psycopg2.connect(DATABASE_URL)
 @app.post("/create-course")
 async def create_course(course: Course, user: User = Depends(current_user)):
