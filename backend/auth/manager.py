@@ -5,6 +5,7 @@ from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin, IntegerIDMixin, schemas, models
 
 from auth.database import User, get_user_db
+from git.auth import git_login_as_god
 
 SECRET = "SECRET"
 
@@ -14,6 +15,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     verification_token_secret = SECRET
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
+        gl = git_login_as_god()
         print(f"User {user.id} has registered.")
 
     async def create(

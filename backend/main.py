@@ -8,7 +8,7 @@ from auth.database import User
 from auth.manager import get_user_manager
 from auth.schemas import UserRead, UserCreate
 
-from git.GitAuth import gitLoginAsGod
+from git.auth import git_login_as_god
 
 
 app = FastAPI()
@@ -37,5 +37,5 @@ def protected_route(user: User = Depends(current_user)):
 
 @app.get("/gitlab-test")
 def gitlab_test():
-    gl = gitLoginAsGod()
+    gl = git_login_as_god()
     return f"Hello"
