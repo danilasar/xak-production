@@ -11,6 +11,7 @@ class UserRead(schemas.BaseUser[int]):
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
+    git_password: str = None
 
 
 class UserCreate(schemas.BaseUserCreate):
@@ -21,3 +22,4 @@ class UserCreate(schemas.BaseUserCreate):
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
+    git_password: Optional[str] = None
