@@ -39,7 +39,7 @@ def gitlab_test():
     print(users)
     return f"Hello"
   
-@app.post("/create-course", summary="Создание нового курса (Только преподаватель).")
+@app.post("/create-course", summary="Создание нового курса (Только преподаватель).", tags=["Courses"])
 def create_course(course: Course, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
@@ -50,7 +50,7 @@ def create_course(course: Course, user: Users = Depends(current_user)):
     return f"Course {course.name} created successfully"
 
 
-@app.post("/create-group", summary="Создание новой группы (Только преподаватель).")
+@app.post("/create-group", summary="Создание новой группы (Только преподаватель).", tags=["Groups"])
 def create_group(group: Group, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
@@ -61,12 +61,12 @@ def create_group(group: Group, user: Users = Depends(current_user)):
     return f"Group {group.name} created successfully"
 
 
-@app.post("/join-course/{course_id}", summary="Присоединение к курсу")
+@app.post("/join-course/{course_id}", summary="Присоединение к курсу", tags=["Courses"])
 def join_course(course_id, user: Users = Depends(current_user)):
     db.join_course(user.id, user.role_id, course_id)
     return "Пользователь успешно записан на курс"
 
-@app.post("/create-task/{course_id}", summary="Создание заданий на курсе (Только преподаватель)")
+@app.post("/create-task/{course_id}", summary="Создание заданий на курсе (Только преподаватель)", tags=["Courses"])
 def create_task(course_id, name, max_grade, description, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
