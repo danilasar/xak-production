@@ -39,6 +39,8 @@ def protected_route(user: Users = Depends(current_user)):
 @app.get("/gitlab-test")
 def gitlab_test():
     gl = git_login_as_god()
+    users = gl.users.list()
+    print(users)
     return f"Hello"
   
 @app.post("/create-course")

@@ -21,7 +21,7 @@ def git_login_as_user(username, password):
     gitlab_instance = git_get_instance(gitlab_oauth_token)
     return gitlab_instance
 
-def git_get_instance(oauth_token):
+def git_get_instance(gitlab_oauth_token):
     gitlab_instance = gitlab.Gitlab(url=GITLAB_API_URL, oauth_token=gitlab_oauth_token)
     gitlab_instance.auth()
     gitlab_instance.enable_debug()
