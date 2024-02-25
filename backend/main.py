@@ -36,13 +36,13 @@ def protected_route(user: Users = Depends(current_user)):
     return f"Hello, {user.username}"
 
 @app.post("/create-course")
-async def create_course(course: Course, user: Users = Depends(current_user)):
+def create_course(course: Course, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Данная команда доступна только для преподавателей.",
         )
-    await db.add_course(owner_id= user.id, category=course.category, name=course.name, is_open=course.is_open, sword=course.sword, slug=course.slug)
+    db.add_course(owner_id= user.id, category=course.category, name=course.name, is_open=course.is_open, sword=course.sword)
     return f"Course created"
 @app.post("/create-group")
 def create_group(group: Group, user: Users = Depends(current_user)):
@@ -51,7 +51,7 @@ def create_group(group: Group, user: Users = Depends(current_user)):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Данная команда доступна только для преподавателей.",
         )
-    return group
+    db.add_group(owner_id=user.id, members_id=group.members, name=group.name)
 
 '''
 @app.post("/join-course/{course_id}")

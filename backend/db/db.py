@@ -5,11 +5,11 @@ class MyDataBase:
 
     def __init__(self):
         self.conn = psycopg2.connect(
-            dbname="xakaton",
-            user="gitflic",
-            password="gitflic",
-            host="10.124.243.242",
-            port="5433"
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASS,
+            host=DB_HOST,
+            port=DB_PORT
         )
         self.cursor = self.conn.cursor()
 
@@ -21,15 +21,21 @@ class MyDataBase:
         result = self.cursor.execute("SELECT id FROM users WHERE username = ?", (username,))
         return result.fetchone()[0]
 
-    async def add_course(self, owner_id, category, name, is_open, sword, slug):
-        await self.cursor.execute("INSERT INTO courses (owner_id, category, name, is_open, sword, slug) VALUES (%s, %s, %s, %s, %s, %s)", (owner_id, category, name, is_open, sword, slug))
+    def add_course(self, owner_id, category, name, is_open, sword):
+        self.cursor.execute("INSERT INTO courses (owner_id, category, name, is_open, sword) VALUES (%s, %s, %s, %s, %s)", (owner_id, category, name, bool(is_open), sword))
         self.conn.commit()
+
+    def add_group(self, owner_id, members_id, name):
+        self.cursor.execute("INSERT INTO groups VALUES (%s, %s)", (owner_id, name))
+        self.conn.commit()
+        q = self.cursor.execute("SELECT id FROM groups WHERE name LIKE %s", (name,))
+        for members in members_id:
+            self.cursor.execute("INSERT INTO group VALUES (%s)", (q, members))
+        self.conn.commit()
+
+    #def join_course(self, ):
+
 '''
-    def add_group(self, owner_id, members_id)
-        self.cursor.execute("INSERT INTO course  VALUES = ?", (owner_id, category, name, is_open, sword, slug))
-        self.conn.commit()
-
-
     def delete_user(self, username):
         id = self.get_user_id(username)
         self.cursor.execute("DELETE FROM users WHERE id = ?", (id,))
