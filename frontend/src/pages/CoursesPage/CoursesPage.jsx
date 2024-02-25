@@ -20,7 +20,7 @@ const CoursesPage = (props) => {
         <div className={style.coursesWrapper}>
             {coursesList && coursesList.map((item) => <CourseSearchCard setTab={props.setTab} value={item.title} {...item} />)}
             {!coursesList && <div className={style.undefined} ><ErrorOutlineRounded /><h4>По вашему запросу ничего не найдено!</h4></div>}
-        </div><pre>{JSON.stringify(coursesList, ";", 2)}</pre>
+        </div>
     </section>
     )
 }
