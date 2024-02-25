@@ -7,6 +7,7 @@ from auth.database import Users
 from auth.manager import get_user_manager
 from auth.schemas import UserRead, UserCreate
 
+from git.auth import git_login_as_god
 from models.object_models import Course, Group
 from db.db import MyDataBase
 
@@ -35,6 +36,11 @@ current_user = fastapi_users.current_user()
 def protected_route(user: Users = Depends(current_user)):
     return f"Hello, {user.username}"
 
+@app.get("/gitlab-test")
+def gitlab_test():
+    gl = git_login_as_god()
+    return f"Hello"
+  
 @app.post("/create-course")
 def create_course(course: Course, user: Users = Depends(current_user)):
     if user.role_id != 2:
