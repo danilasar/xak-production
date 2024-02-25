@@ -38,7 +38,10 @@ class MyDataBase:
         self.conn.commit()
         return "Group added in db"
 
-    #def join_course(self, ):
+    def join_course(self, user_id, role_id, course_id):
+        self.cursor.execute("INSERT INTO course_members VALUES (%s, %s, %s)", (user_id, role_id, course_id))
+        self.conn.commit()
+        return f"User with ID {user_id} assigned to course {course_id}!"
 
 '''
     def delete_user(self, username):
