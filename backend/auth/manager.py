@@ -6,6 +6,7 @@ from fastapi_users import BaseUserManager, UUIDIDMixin, IntegerIDMixin, schemas,
 
 from auth.database import User, get_user_db
 from git.auth import git_login_as_god
+from git.user import GitUser
 
 SECRET = "SECRET"
 
@@ -15,7 +16,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     verification_token_secret = SECRET
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
-        gl = git_login_as_god()
         print(f"User {user.id} has registered.")
 
     async def create(
@@ -37,6 +37,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         :raises UserAlreadyExists: A user already exists with the same e-mail.
         :return: A new user.
         """
+        global user_dict
         await self.validate_password(user_create.password, user_create)
 
         existing_user = await self.user_db.get_by_email(user_create.email)
@@ -53,11 +54,14 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         if user_dict["role_id"] > 3:
             user_dict["role_id"] = 1
 
+        git_user = GitUser.create(email=user_create.email, username=user_create.username)
+        user_dict["git_password"] = git_user.password
+
         created_user = await self.user_db.create(user_dict)
 
         await self.on_after_register(created_user, request)
 
-
+        printf(f"User created: {created_user.id}, git password: {created_user.git_password}")
         return created_user
 
 
