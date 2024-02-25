@@ -65,6 +65,20 @@ def create_group(group: Group, user: Users = Depends(current_user)):
 def join_course(course_id, user: Users = Depends(current_user)):
     db.join_course(user.id, user.role_id, course_id)
     return "Пользователь успешно записан на курс"
+  
+@app.post("/solve_task/{task_id}")
+async def solve_task(task_id, user: Users = Depends(current_user)):
+    if user.role_id != 1:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Данная команда доступна только для учеников.",
+        )
+    task = db.get_task(task_id)
+    if(not db.is_course_member(user.id, task.course_id)):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Вы не являетесь участником данного курса.",
+        )
 
 @app.post("/create-task/{course_id}", summary="Создание заданий на курсе (Только преподаватель)", tags=["Courses"])
 def create_task(course_id, name, max_grade, description, user: Users = Depends(current_user)):
@@ -75,4 +89,3 @@ def create_task(course_id, name, max_grade, description, user: Users = Depends(c
         )
     db.create_task(course_id, name, max_grade, description)
     return "Задание успешно создано"
-

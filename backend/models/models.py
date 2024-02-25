@@ -69,11 +69,23 @@ course_members = Table('course_members',
     Column('role', Integer, ForeignKey('role.id'), nullable=False),
     Column('course_id', Integer, ForeignKey('courses.id'), nullable=False))
 
-attempts = Table('attempts',
+solutions = Table('task_solutions',
     metadata,
     Column('id', Integer, nullable=False, primary_key=True),
     Column('user_id', Integer, ForeignKey('users.id'), nullable=False),
-    Column('number', Integer, nullable=False),
+    Column('task_id', Integer, ForeignKey('tasks.id'), nullable=False),
+    Column('first_attempt_id', Integer, nullable=True),
+    Column('last_attempt_id', Integer, nullable=True),
+    Column('attempts_count', Integer, nullable=False),
+    Column('is_closed', Boolean, nullable=False, default=False))
+
+attempts = Table('attempts',
+    metadata,
+    Column('id', Integer, nullable=False, primary_key=True),
+    Column('solution_id', Integer, nullable=False),
+    Column('number', Integer, nullable=False, default=1),
     Column('mark', Integer, nullable=True),
     Column('mark_desc', String, nullable=True),
-    Column('mark_teacher', Integer, nullable=True))
+    Column('mark_teacher', Integer, nullable=True),
+    Column('commit_id', String, nullable=False))
+
