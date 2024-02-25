@@ -69,7 +69,7 @@ const RegPage = (props) => {
         </FormControl>
         <FormControl sx={{ m: 2 }} fullWidth required variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">Повторите пароль</InputLabel>
-          <OutlinedInput onChange={(event) => {passwordEquals(event.target.value)}}
+          <OutlinedInput
             id="outlined-adornment-password"
             value={passwordEquals}
             type={showPassword ? 'text' : 'password'}
