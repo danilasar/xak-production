@@ -43,6 +43,10 @@ class MyDataBase:
         self.conn.commit()
         return f"User with ID {user_id} assigned to course {course_id}!"
 
+    def create_task(self, course_id, name, max_grade, description):
+        self.cursor.execute("INSERT INTO tasks (course_id, name, max_grade, description) VALUES (%s, %s, %s, %s)", (course_id, name, max_grade, description))
+        self.conn.commit()
+        return f"Task {name} added to course with ID {course_id}"
 '''
     def delete_user(self, username):
         id = self.get_user_id(username)

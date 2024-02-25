@@ -32,10 +32,6 @@ app.include_router(
 
 current_user = fastapi_users.current_user()
 
-@app.get("/protected-route")
-def protected_route(user: Users = Depends(current_user)):
-    return f"Hello, {user.username}"
-
 @app.get("/gitlab-test")
 def gitlab_test():
     gl = git_login_as_god()
@@ -43,7 +39,7 @@ def gitlab_test():
     print(users)
     return f"Hello"
   
-@app.post("/create-course")
+@app.post("/create-course", summary="Создание нового курса (Только преподаватель).")
 def create_course(course: Course, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
@@ -54,7 +50,7 @@ def create_course(course: Course, user: Users = Depends(current_user)):
     return f"Course {course.name} created successfully"
 
 
-@app.post("/create-group")
+@app.post("/create-group", summary="Создание новой группы (Только преподаватель).")
 def create_group(group: Group, user: Users = Depends(current_user)):
     if user.role_id != 2:
         raise HTTPException(
@@ -65,8 +61,18 @@ def create_group(group: Group, user: Users = Depends(current_user)):
     return f"Group {group.name} created successfully"
 
 
-@app.post("/join-course/{course_id}")
-async def join_course(course_id, user: Users = Depends(current_user)):
+@app.post("/join-course/{course_id}", summary="Присоединение к курсу")
+def join_course(course_id, user: Users = Depends(current_user)):
     db.join_course(user.id, user.role_id, course_id)
     return "Пользователь успешно записан на курс"
+
+@app.post("/create-task/{course_id}", summary="Создание заданий на курсе (Только преподаватель)")
+def create_task(course_id, name, max_grade, description, user: Users = Depends(current_user)):
+    if user.role_id != 2:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Данная команда доступна только для преподавателей.",
+        )
+    db.create_task(course_id, name, max_grade, description)
+    return "Задание успешно создано"
 
